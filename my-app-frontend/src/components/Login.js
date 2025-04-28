@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // A promise-based HTTP client that allows you to make requests to the backend server
 import axios from 'axios';
 
-const Login = () => {
+const Login = ({onLogin}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -18,7 +18,7 @@ const Login = () => {
 
       // Save token in localStorage, allowing it to be used in future API requests
       localStorage.setItem('token', response.data.token); 
-      alert('Login successful!');
+      onLogin();
     } catch (error) {
       alert('Login failed: ' + error.response.data.message);
     }
