@@ -13,10 +13,35 @@ const HomePage = () => {
 
     const scrollToFeatures = () => {
         const anchor = document.getElementById('scroll-anchor');
-        if (anchor) {
-            anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        if (!anchor) return;
+
+        const targetY = anchor.getBoundingClientRect().top + window.scrollY;
+        const startY = window.scrollY;
+        const distance = targetY - startY;
+        const duration = 1000; // 👈 how long the scroll takes (milliseconds) (1000ms = 1 second)
+
+        let startTime = null;
+
+        const animateScroll = (currentTime) => {
+            if (startTime === null) startTime = currentTime;
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1); // progress from 0 to 1
+
+            window.scrollTo(0, startY + distance * easeInOutQuad(progress));
+
+            if (elapsed < duration) {
+                requestAnimationFrame(animateScroll);
+            }
+        };
+
+        // Easing function for smoother effect
+        const easeInOutQuad = (t) => {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        };
+
+        requestAnimationFrame(animateScroll);
     };
+
 
     useEffect(() => {
         const timer = setTimeout(() => {
