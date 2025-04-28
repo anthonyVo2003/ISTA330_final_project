@@ -54,3 +54,24 @@
   box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
 }
 
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-input::placeholder {
+  color: #bbb;
+}
+
+.form-input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #28a745;
+}
