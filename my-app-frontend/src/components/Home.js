@@ -1,175 +1,45 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { motion, useViewportScroll, useTransform } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import React from 'react';
+import './Home.css';
+import { motion } from 'framer-motion';
 
 const HomePage = () => {
-    const { scrollY } = useViewportScroll();
-    const backgroundY = useTransform(scrollY, [0, 300], [0, 100]);
-    const backgroundScale = useTransform(scrollY, [0, 300], [1, 1.1]);
-    const featuresRef = useRef(null);
+  return (
+    <div className="homepage-background">
+      <motion.div 
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="homepage-glass"
+      >
+        <h1 className="homepage-title">Welcome to FitTrack!</h1>
+        <p className="homepage-subtitle">
+          Track your workouts, smash your personal records, and share your progress with friends.
+        </p>
 
-    const [shouldBounce, setShouldBounce] = useState(false);
+        <div className="card-grid">
+          <div className="homepage-card">
+            <h2>🏋️ Workout Tracking</h2>
+            <p>Log your workouts, sets, reps, and weights. Keep track of your progress day by day.</p>
+          </div>
 
-    const scrollToFeatures = () => {
-        const anchor = document.getElementById('scroll-anchor');
-        if (!anchor) return;
+          <div className="homepage-card">
+            <h2>📋 Exercise Selection</h2>
+            <p>Browse or add custom exercises. Watch videos and understand muscle groups involved.</p>
+          </div>
 
-        const targetY = anchor.getBoundingClientRect().top + window.scrollY;
-        const startY = window.scrollY;
-        const distance = targetY - startY;
-        const duration = 1000; // 👈 how long the scroll takes (milliseconds) (1000ms = 1 second)
+          <div className="homepage-card">
+            <h2>🏆 Achievements</h2>
+            <p>Break your personal bests and earn icons. Celebrate your milestones.</p>
+          </div>
 
-        let startTime = null;
-
-        const animateScroll = (currentTime) => {
-            if (startTime === null) startTime = currentTime;
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1); // progress from 0 to 1
-
-            window.scrollTo(0, startY + distance * easeInOutQuad(progress));
-
-            if (elapsed < duration) {
-                requestAnimationFrame(animateScroll);
-            }
-        };
-
-        // Easing function for smoother effect
-        const easeInOutQuad = (t) => {
-            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-        };
-
-        requestAnimationFrame(animateScroll);
-    };
-
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setShouldBounce(true);
-        }, 3000);
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    return (
-        <div style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
-
-            {/* Hero Section */}
-            <motion.div
-                style={{
-                    backgroundImage: 'url("/workout-bg.jpg")',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    height: '100vh',
-                    position: 'relative',
-                    color: 'white',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    y: backgroundY,
-                    scale: backgroundScale
-                }}
-            >
-                {/* Dark overlay */}
-                <div style={{
-                    position: 'absolute',
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.6)'
-                }} />
-
-                {/* Hero Content */}
-                <motion.div
-                    initial={{ opacity: 0, y: -50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1 }}
-                    style={{ position: 'relative', zIndex: 2 }}
-                >
-                    <h1 className="mb-4" style={{ fontSize: '3rem', fontWeight: 'bold' }}>
-                        Track Your Progress, Crush Your Goals
-                    </h1>
-                    <p className="mb-4" style={{ fontSize: '1.3rem' }}>
-                        Welcome to FitTrack — stay consistent, get stronger, and celebrate every win!
-                    </p>
-
-                    {/* Start Button */}
-                    <motion.button
-                        onClick={scrollToFeatures}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                        className="btn btn-success btn-lg"
-                    >
-                        Start Your Journey
-                    </motion.button>
-
-                    {/* Bouncing Arrow */}
-                    <motion.div
-                        onClick={scrollToFeatures}
-                        style={{ marginTop: '40px', cursor: 'pointer' }}
-                        animate={shouldBounce ? { y: [0, 15, 0] } : {}}
-                        transition={{ repeat: shouldBounce ? Infinity : 0, duration: 2 }}
-                    >
-                        <ChevronDown size={40} />
-                    </motion.div>
-                </motion.div>
-            </motion.div>
-            <div id="scroll-anchor" style={{ height: '100px', backgroundColor: '#121212' }}></div>
-
-            {/* Features Section */}
-            <Container
-                ref={featuresRef}
-                fluid
-                style={{ backgroundColor: '#121212', padding: '40px 0' }}
-                className="text-center"
-            >
-
-                <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-                    <h2 id="features-header" className="mb-5" style={{ fontWeight: 'bold', fontSize: '2.5rem', color: '#fff' }}>
-                        Why Choose FitTrack?
-                    </h2>
-                    <Row className="g-4">
-                        {[
-                            { title: "Create Workouts", text: "Build custom workouts tailored to your fitness journey." },
-                            { title: "Track Progress", text: "Visualize your strength gains and milestones easily." },
-                            { title: "Break Records", text: "Push your limits and celebrate every personal best!" },
-                        ].map((feature, index) => (
-                            <Col key={index} md={4}>
-                                <motion.div
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    transition={{ type: 'spring', stiffness: 300 }}
-                                    className="feature-card"
-                                >
-                                    <div className="glass-card shadow-lg p-4 rounded-4 h-100">
-                                        <h3 style={{ fontWeight: '600', marginBottom: '1rem', color: '#fff' }}>{feature.title}</h3>
-                                        <p style={{ color: '#ccc' }}>{feature.text}</p>
-                                    </div>
-                                </motion.div>
-                            </Col>
-                        ))}
-                    </Row>
-
-                    {/* Motivation Section */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                        className="mt-5 p-4 rounded-4 shadow-lg"
-                        style={{ backgroundColor: '#1c1c1c', color: '#f0f0f0', maxWidth: '800px', margin: '0 auto' }}
-                    >
-                        <h4 className="mb-3" style={{ fontStyle: 'italic' }}>
-                            "Strength doesn’t come from what you can do. It comes from overcoming the things you once thought you couldn’t."
-                        </h4>
-                        <p className="text-end mb-0">— FitTrack Team</p>
-                    </motion.div>
-                </div>
-            </Container>
-
+          <div className="homepage-card">
+            <h2>📱 Social</h2>
+            <p>Connect with other fitness lovers. Share workouts, images, and videos.</p>
+          </div>
         </div>
-    );
+      </motion.div>
+    </div>
+  );
 };
 
 export default HomePage;
