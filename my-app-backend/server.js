@@ -26,6 +26,6 @@ app.use('/api/auth', authRoutes);
 
 // Server listen
 // It first checks if a PORT is defined in the environment variables (process.env.PORT), and if not, it defaults to port 5000.
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 // Starts the server, making it listen for incoming HTTP requests on the specified port.
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
